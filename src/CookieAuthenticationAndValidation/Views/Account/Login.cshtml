@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <h2>Cookie Login</h2>
+    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = @ViewData["ReturnUrl"] }, FormMethod.Post))
+    {
+        var cookieUserName = string.Empty;
+        @if (User != null && User.Identities.Any(i => i.IsAuthenticated && i.AuthenticationType == "Cookie"))
+        {
+            cookieUserName = User.Identities.Where(i => i.IsAuthenticated && i.AuthenticationType == "Cookie").First().Name;
+        }
+
+        <label asp-for="userName">User Name</label>
+        <text>:</text>
+        <input type="text" id="userName" name="userName" value="@cookieUserName" />
+        <text>&nbsp;</text>
+        <button type="submit">Log in</button>
+    }
+</body>
+</html>

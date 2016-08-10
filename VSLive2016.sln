@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3743E0D0-930C-42D8-AA14-31A5F5D23B15}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2833DDC6-DB24-4D01-B3EB-188372E096E1}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CookieAuthenticationAndValidation", "src\CookieAuthenticationAndValidation\CookieAuthenticationAndValidation.xproj", "{F57A2AAC-4242-46EC-B8C8-256CC74C7158}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Authorization", "src\Authorization\Authorization.xproj", "{B6F56A4B-C3C8-45F1-A5F8-136030F5AB8B}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "MultipleAuthentication", "src\MultipleAuthentication\MultipleAuthentication.xproj", "{CC821CE1-4089-45EF-AD0C-84F30D73D2B7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F57A2AAC-4242-46EC-B8C8-256CC74C7158}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F57A2AAC-4242-46EC-B8C8-256CC74C7158}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F57A2AAC-4242-46EC-B8C8-256CC74C7158}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F57A2AAC-4242-46EC-B8C8-256CC74C7158}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6F56A4B-C3C8-45F1-A5F8-136030F5AB8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6F56A4B-C3C8-45F1-A5F8-136030F5AB8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6F56A4B-C3C8-45F1-A5F8-136030F5AB8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6F56A4B-C3C8-45F1-A5F8-136030F5AB8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC821CE1-4089-45EF-AD0C-84F30D73D2B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC821CE1-4089-45EF-AD0C-84F30D73D2B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC821CE1-4089-45EF-AD0C-84F30D73D2B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC821CE1-4089-45EF-AD0C-84F30D73D2B7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F57A2AAC-4242-46EC-B8C8-256CC74C7158} = {3743E0D0-930C-42D8-AA14-31A5F5D23B15}
+		{B6F56A4B-C3C8-45F1-A5F8-136030F5AB8B} = {3743E0D0-930C-42D8-AA14-31A5F5D23B15}
+		{CC821CE1-4089-45EF-AD0C-84F30D73D2B7} = {3743E0D0-930C-42D8-AA14-31A5F5D23B15}
+	EndGlobalSection
+EndGlobal

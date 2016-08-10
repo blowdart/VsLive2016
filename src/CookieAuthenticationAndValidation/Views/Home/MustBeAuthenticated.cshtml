@@ -1,0 +1,23 @@
+﻿<h1>You're authenticated!</h1>
+
+<h2>
+    Hello
+    @foreach (var identity in User.Identities)
+            {
+        @if (identity.IsAuthenticated)
+                {
+            @identity.Name
+            <text>&nbsp;</text>
+        }
+    }
+</h2>
+
+<p>
+    @Html.ActionLink("Home", "Index", "Home") |
+    @Html.ActionLink("Fails Authorization", "FailAuthorization", "Home")
+</p>
+
+@using (Html.BeginForm("Logout", "Account", new { ReturnUrl = "/" }, FormMethod.Post))
+{
+    <button type="submit">Log out</button>
+}

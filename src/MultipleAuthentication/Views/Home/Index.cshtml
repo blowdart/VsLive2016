@@ -1,0 +1,285 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>Home</title>
+    <style>
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            opacity: 0.5;
+            filter: alpha(opacity=50);
+        }
+
+        #modal {
+            position: absolute;
+            background: url(tint20.png) 0 0 repeat;
+            background: rgba(0,0,0,0.2);
+            border-radius: 14px;
+            padding: 8px;
+        }
+
+        #content {
+            border-radius: 8px;
+            background: #fff;
+            padding: 20px;
+        }
+
+        #close {
+            position: absolute;
+            background: url(close.png) 0 0 no-repeat;
+            width: 24px;
+            height: 27px;
+            display: block;
+            text-indent: -9999px;
+            top: -7px;
+            right: -7px;
+        }
+    </style>
+
+</head>
+<body>
+    @if (User == null ||
+         !User.Identities.Any(i => i.IsAuthenticated))
+    {
+        <h1>Hello Anonymous.</h1>
+    }
+    else
+    {
+        <h1>Hello 
+            @foreach (var identity in User.Identities)
+            {
+                @if (identity.IsAuthenticated)
+                {
+                    @identity.Name
+                    <text>&nbsp;</text>
+                }
+            }
+        </h1>
+    }
+
+    <h2>Cookie Login</h2>
+    @using (Html.BeginForm("Login", "Home", new { ReturnUrl = "/" }, FormMethod.Post))
+    {
+        var cookieUserName = string.Empty;
+        @if (User != null && User.Identities.Any(i => i.IsAuthenticated && i.AuthenticationType == "Cookie"))
+        {
+            cookieUserName = User.Identities.Where(i => i.IsAuthenticated && i.AuthenticationType == "Cookie").First().Name;
+        }
+
+        <label asp-for="userName">User Name</label>
+        <text>:</text>
+        <input type="text" id = "userName" name="userName" value="@cookieUserName" />
+        <text>&nbsp;</text>
+        <button type="submit">Log in</button>
+    }
+
+    @if (User != null && User.Identities.Any(i => i.IsAuthenticated))
+    {
+        @using (Html.BeginForm("Logout", "Home", new { ReturnUrl = "/" }, FormMethod.Post))
+        {
+            <button type="submit">Log out</button>
+        }
+    }
+
+    <h2>Bearer Login</h2>
+    <form id="bearerDetails">
+        <label asp-for="bearerUserName">User Name</label>
+        <text>:</text>
+        <input type="text" id="bearerUserName" name="bearerUserName" />
+    </form>
+
+    <h3>Do Magic</h3>
+    <input type="button" value="WhoAmI (Any)" id="WhoAmI"/> 
+    &nbsp; 
+    <input type="button" value="WhoAmI (Bearer)" id="WhoAmIBearer" />
+
+    <script src="/lib/jquery.js"></script>
+
+    <script>
+        function GetBearerHeader() {
+            var selectedIdentity = $('#bearerUserName').val();
+            if (selectedIdentity === '') {
+                return null;
+            }
+            else {
+                return 'Bearer ' + selectedIdentity;
+            }
+        }
+
+        function GetWhoAmI() {
+            if (GetBearerHeader()) {
+                $.ajax({
+                    url: '/api/WhoAmI',
+                    type: 'GET',
+                    dataType: 'json',
+                    headers: {
+                        'Authorization': GetBearerHeader()
+                    },
+                    success: function (data) {
+                        var dialogResult = '';
+                        $.each(data, function (i, item) {
+                            dialogResult += item.name + ":" + item.authenticationType + "<br>"
+                        });
+                        modal.open({ content: dialogResult });
+                    },
+                    error: function (x, y, z) {
+                        if (x.status != 401 && x.status != 403) {
+                            alert(x + '\n' + y + '\n' + z);
+                        }
+                    },
+                    statusCode: {
+                        401: function () { alert("401"); },
+                        403: function () { alert("403"); }
+                    }
+                })
+            }
+            else {
+                $.ajax({
+                    url: '/api/WhoAmI',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        var dialogResult = '';
+                        $.each(data, function (i, item) {
+                            dialogResult += item.name + ":" + item.authenticationType + "<br>"
+                        });
+                        modal.open({ content: dialogResult });
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                })
+            }
+        }
+
+        function GetWhoAmIBearerOnly() {
+            if (GetBearerHeader()) {
+                $.ajax({
+                    url: '/api/WhoAmIBearer',
+                    type: 'GET',
+                    dataType: 'json',
+                    headers: {
+                        'Authorization': GetBearerHeader()
+                    },
+                    success: function (data) {
+                        var dialogResult = '';
+                        $.each(data, function (i, item) {
+                            dialogResult += item.name + ":" + item.authenticationType + "<br>"
+                        });
+                        modal.open({ content: dialogResult });
+                    },
+                    error: function (x, y, z) {
+                        if (x.status != 401 && x.status != 403) {
+                            alert(x + '\n' + y + '\n' + z);
+                        }
+                    },
+                    statusCode: {
+                        401: function () { alert("401"); },
+                        403: function () { alert("403"); }
+                    }
+                })
+            }
+            else {
+                $.ajax({
+                    url: '/api/WhoAmIBearer',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        var dialogResult = '';
+                        $.each(data, function (i, item) {
+                            dialogResult += item.name + ":" + item.authenticationType + "<br>"
+                        });
+                        modal.open({ content: dialogResult });
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                })
+            }
+        }
+
+        /* From http://www.jacklmoore.com/demo/modal/modal2.html */
+        var modal = (function () {
+            var
+            method = {},
+            $overlay,
+            $modal,
+            $content,
+            $close;
+
+            // Center the modal in the viewport
+            method.center = function () {
+                var top, left;
+
+                top = Math.max($(window).height() - $modal.outerHeight(), 0) / 2;
+                left = Math.max($(window).width() - $modal.outerWidth(), 0) / 2;
+
+                $modal.css({
+                    top: top + $(window).scrollTop(),
+                    left: left + $(window).scrollLeft()
+                });
+            };
+
+            // Open the modal
+            method.open = function (settings) {
+                $content.empty().append(settings.content);
+
+                $modal.css({
+                    width: settings.width || 'auto',
+                    height: settings.height || 'auto'
+                });
+
+                method.center();
+                $(window).bind('resize.modal', method.center);
+                $modal.show();
+                $overlay.show();
+            };
+
+            // Close the modal
+            method.close = function () {
+                $modal.hide();
+                $overlay.hide();
+                $content.empty();
+                $(window).unbind('resize.modal');
+            };
+
+            // Generate the HTML and add it to the document
+            $overlay = $('<div id="overlay"></div>');
+            $modal = $('<div id="modal"></div>');
+            $content = $('<div id="content"></div>');
+            $close = $('<a id="close" href="#">close</a>');
+
+            $modal.hide();
+            $overlay.hide();
+            $modal.append($content, $close);
+
+            $(document).ready(function () {
+                $('body').append($overlay, $modal);
+            });
+
+            $close.click(function (e) {
+                e.preventDefault();
+                method.close();
+            });
+
+            return method;
+        }());
+
+        $(document).ready(function () {
+            $('#WhoAmI').click(function (e) {
+                e.preventDefault();
+                GetWhoAmI();
+            });
+            $('#WhoAmIBearer').click(function (e) {
+                e.preventDefault();
+                GetWhoAmIBearerOnly();
+            });
+        });
+    </script>
+</body>
+</html>

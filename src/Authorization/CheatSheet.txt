@@ -1,0 +1,97 @@
+﻿First write a BuildingEntryRequirement
+
+public class EnterBuildingRequirement : IAuthorizationRequirement
+{
+}
+
+Now create a policy around it - go to startup.cs; in ConfigureServices add
+
+services.AddAuthorization(options =>
+{
+	options.AddPolicy("BuildingEntry", policy => policy.Requirements.Add(new EnterBuildingRequirement()));
+});
+
+And apply the policy via the authorize attribute to EnterBuilding in HomeController.cs
+
+[Authorize(Policy = "BuildingEntry")]
+public IActionResult EnterBuilding()
+
+Run the code and watch it bounce to forbidden.
+
+Now write a handler which looks for a badge
+
+    public class BuildingEntryAsEmployeeHandler : AuthorizationHandler<EnterBuildingRequirement>
+    {
+        IEmployeeRepository _employeeRepository;
+
+        public BuildingEntryAsEmployeeHandler()
+        {
+            _employeeRepository = employeeRepository;
+        }
+
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, EnterBuildingRequirement requirement)
+        {
+            var badgeNumber =
+                context.User.Claims.FirstOrDefault(c => c.Type == "BadgeNumber" && 
+                                                        c.Issuer == "https://contoso.com");
+
+            if (badgeNumber != null)
+            {
+                context.Succeed(requirement);
+            }
+
+            return Task.FromResult(0);
+        }
+    }
+
+Discuss why we're checking the issuer.
+Add the claim to the issuing code in the Login action in HomeController
+
+    claims.Add(new Claim("BadgeNumber", "123456", ClaimValueTypes.Integer, "https://contoso.com"));
+
+Run the code and watch it bounce to forbidden Why not? You haven't registered the handler in DI. Go do that.
+
+In ConfigureServices()
+
+    services.AddTransient<IAuthorizationHandler, BuildingEntryAsEmployeeHandler>();
+
+Now run.
+
+What about temporary badges?
+
+Remove the badge number claim, and add a new claim
+
+    claims.Add(new Claim("TemporaryBadgeExpiry", 
+                     DateTime.Now.AddDays(1).ToString(), 
+                     ClaimValueTypes.String, 
+                     "https://contoso.com"));
+
+Now add a new handler, for the existing requirement
+
+        protected override Task HandleRequirementAsync(
+          AuthorizationHandlerContext context,
+          EnterBuildingRequirement requirement)
+        {
+            if (!context.User.HasClaim(c => c.Type == "TemporaryBadgeExpiry" &&
+                                            c.Issuer == "https://contoso.com"))
+            {
+                return Task.FromResult(0);
+            }
+
+            var temporaryBadgeExpiry =
+                Convert.ToDateTime(context.User.FindFirst(
+                                       c => c.Type == "TemporaryBadgeExpiry" &&
+                                       c.Issuer == "https://contoso.com").Value);
+
+            if (temporaryBadgeExpiry > DateTime.Now)
+            {
+                context.Succeed(requirement);
+            }
+
+            return Task.FromResult(0);
+        }
+    }
+
+And register it in DI.
+
+Run.

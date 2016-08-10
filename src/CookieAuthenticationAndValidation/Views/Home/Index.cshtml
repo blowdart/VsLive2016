@@ -1,0 +1,24 @@
+﻿@using System.Security.Claims;
+
+@if (!User.Identities.Any(u => u.IsAuthenticated))
+{
+    <h1>Hello World</h1>
+}
+else
+{
+    <h1>
+        Hello @User.Identities.First(u => u.IsAuthenticated &&
+                                     u.HasClaim(c => c.Type == ClaimTypes.Name)).FindFirst(ClaimTypes.Name).Value
+    </h1>
+}
+
+<p>@Html.ActionLink("Requires Authentication", "MustBeAuthenticated", "Home") | 
+   @Html.ActionLink("Fails Authorization", "FailAuthorization", "Home")</p>
+
+@if (User != null && User.Identities.Any(i => i.IsAuthenticated))
+{
+    @using (Html.BeginForm("Logout", "Account", new { ReturnUrl = "/" }, FormMethod.Post))
+    {
+        <button type="submit">Log out</button>
+    }
+}
