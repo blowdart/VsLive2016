@@ -16,6 +16,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Authorization", "src\Author
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "MultipleAuthentication", "src\MultipleAuthentication\MultipleAuthentication.xproj", "{CC821CE1-4089-45EF-AD0C-84F30D73D2B7}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AuthorizationComplete", "src\AuthorizationComplete\AuthorizationComplete.xproj", "{A3FB8688-C062-4D9D-9B0A-82BA3941EAE2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +36,10 @@ Global
 		{CC821CE1-4089-45EF-AD0C-84F30D73D2B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC821CE1-4089-45EF-AD0C-84F30D73D2B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC821CE1-4089-45EF-AD0C-84F30D73D2B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3FB8688-C062-4D9D-9B0A-82BA3941EAE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3FB8688-C062-4D9D-9B0A-82BA3941EAE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3FB8688-C062-4D9D-9B0A-82BA3941EAE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3FB8688-C062-4D9D-9B0A-82BA3941EAE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,5 +48,6 @@ Global
 		{F57A2AAC-4242-46EC-B8C8-256CC74C7158} = {3743E0D0-930C-42D8-AA14-31A5F5D23B15}
 		{B6F56A4B-C3C8-45F1-A5F8-136030F5AB8B} = {3743E0D0-930C-42D8-AA14-31A5F5D23B15}
 		{CC821CE1-4089-45EF-AD0C-84F30D73D2B7} = {3743E0D0-930C-42D8-AA14-31A5F5D23B15}
+		{A3FB8688-C062-4D9D-9B0A-82BA3941EAE2} = {3743E0D0-930C-42D8-AA14-31A5F5D23B15}
 	EndGlobalSection
 EndGlobal
